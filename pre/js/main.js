@@ -126,6 +126,19 @@ function main(error, distritosAux, data) {
                 return color(+d.data[93].tasa_incidencia_semanal);
             })
             .attr("d", path);
+
+        mapLayer.append("g")
+            .selectAll("labels")
+            .data(distritos.features)
+            .enter()
+            .append("text")
+            .attr("x", function(d){return path.centroid(d)[0]})
+            .attr("y", function(d){return path.centroid(d)[1]})
+            .text(function(d){ return d.data[0].id_distrito; })
+            .attr("text-anchor", "middle")
+            .attr("alignment-baseline", "central")
+            .style("font-size", 11)
+            .style("fill", "white");
     }
 
     function updateMap(index) {

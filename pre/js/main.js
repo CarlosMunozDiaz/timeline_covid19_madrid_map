@@ -43,7 +43,7 @@ function main(error, distritosAux, data) {
     function createTimeslider(){        
         /* Los siguientes eventos tienen la capacidad de modificar lo que se muestra en el mapa */
         playButton.onclick = function () {
-            sliderInterval = setInterval(setNewValue,1000);
+            sliderInterval = setInterval(setNewValue,750);
             playButton.style.display = 'none';
             pauseButton.style.display = 'inline-block';    
         }
@@ -124,18 +124,6 @@ function main(error, distritosAux, data) {
             .style('opacity', '1')
             .style("fill", function(d) {
                 return color(+d.data[93].tasa_incidencia_semanal);
-
-                // if(parseInt(d.data[93].tasa_incidencia_semanal) >= 0 & parseInt(d.data[93].tasa_incidencia_semanal) < 885) {
-                //     return '#ffe6b7';
-                // } else if (parseInt(d.data[93].tasa_incidencia_semanal) >= 885 & parseInt(d.data[93].tasa_incidencia_semanal) < 1770) {
-                //     return '#fecc7b';
-                // } else if (parseInt(d.data[93].tasa_incidencia_semanal) >= 1770 & parseInt(d.data[93].tasa_incidencia_semanal) < 2655) {
-                //     return '#f8b05c';
-                // } else if (parseInt(d.data[93].tasa_incidencia_semanal) >= 2655 & parseInt(d.data[93].tasa_incidencia_semanal) < 3540) {
-                //     return '#f1944d';
-                // } else if (parseInt(d.data[93].tasa_incidencia_semanal) >= 3540) {
-                //     return '#e37a42';
-                // }
             })
             .attr("d", path);
     }
@@ -145,18 +133,6 @@ function main(error, distritosAux, data) {
         mapLayer.selectAll(".dist")
             .style("fill", function(d) {
                 return color(+d.data[index].tasa_incidencia_semanal);
-
-                // if(parseInt(d.data[index].tasa_incidencia_semanal) >= 0 & parseInt(d.data[index].tasa_incidencia_semanal) < 885) {
-                //     return '#ffe6b7';
-                // } else if (parseInt(d.data[index].tasa_incidencia_semanal) >= 885 & parseInt(d.data[index].tasa_incidencia_semanal) < 1770) {
-                //     return '#fecc7b';
-                // } else if (parseInt(d.data[index].tasa_incidencia_semanal) >= 1770 & parseInt(d.data[index].tasa_incidencia_semanal) < 2655) {
-                //     return '#f8b05c';
-                // } else if (parseInt(d.data[index].tasa_incidencia_semanal) >= 2655 & parseInt(d.data[index].tasa_incidencia_semanal) < 3540) {
-                //     return '#f1944d';
-                // } else if (parseInt(d.data[index].tasa_incidencia_semanal) >= 3540) {
-                //     return '#e37a42';
-                // }
             })
     }
 

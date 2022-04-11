@@ -94,14 +94,14 @@ body {
             appearance: none;
             width: 5px;
             height: 15px;
-            background: #f1944d;
+            background: #2b959c;
             cursor: pointer;
         }
         
         .slider::-moz-range-thumb {
             width: 5px;
             height: 15px;
-            background: #f1944d;
+            background: #2b959c;
             cursor: pointer;
         }
 
@@ -163,12 +163,15 @@ body {
         }
 
         .legend--first { background-color: #56f9ff;}
-        .legend--second { background-color: #46d2d9;}
-        .legend--third { background-color: #36adb4;}
-        .legend--fourth { background-color: #268990;}
-        .legend--fifth { background-color: #17666e;}
-        .legend--sixth { background-color: #09464d;}
-        .legend--seventh { background-color: #00282f;}
+        .legend--second { background-color: #4bdfe5;}
+        .legend--third { background-color: #40c6cc;}
+        .legend--fourth { background-color: #36adb4;}
+        .legend--fifth { background-color: #2b959c;}
+        .legend--sixth { background-color: #217d84;}
+        .legend--seventh { background-color: #17666e;}
+        .legend--eight { background-color: #0e5158;}
+        .legend--nineth { background-color: #053c43;}
+        .legend--tenth { background-color: #00282f;}
     }
 
     &--down {

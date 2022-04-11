@@ -24,8 +24,6 @@ d3.queue()
 function main(error, distritosAux, data) {
     if (error) throw error;
 
-    distritos = topojson.feature(distritosAux, municipios.objects.distritos);
-
     ////////
     //////
     // LÓGICA DEL SLIDER
@@ -44,7 +42,7 @@ function main(error, distritosAux, data) {
     function createTimeslider(){        
         /* Los siguientes eventos tienen la capacidad de modificar lo que se muestra en el mapa */
         playButton.onclick = function () {
-            sliderInterval = setInterval(setNewValue,1500);
+            sliderInterval = setInterval(setNewValue,1000);
             playButton.style.display = 'none';
             pauseButton.style.display = 'inline-block';    
         }
@@ -76,7 +74,7 @@ function main(error, distritosAux, data) {
     
         updateMap(currentValue);
     
-        if (currentValue == 2035) {
+        if (currentValue == 94) {
             clearInterval(sliderInterval);
             playButton.style.display = 'inline-block';
             pauseButton.style.display = 'none';
@@ -84,7 +82,8 @@ function main(error, distritosAux, data) {
     }
 
     function setDate(index) {
-        console.log(index);
+        let auxData = distritos.features[0].data[index - 1];
+        return auxData.fecha_informe;
     }
 
     ////////
@@ -93,10 +92,11 @@ function main(error, distritosAux, data) {
     //////
     ///////
 
+    distritos = topojson.feature(distritosAux, distritosAux.objects.distritos);    
+
     ///HACEMOS EL JOIN
     distritos.features.forEach(function(item) {
         let join = data.filter(function(subItem) {
-            console.log(subItem.municipio_distrito.substr(5));
             if(subItem.municipio_distrito.substr(7) == item.properties.NOMBRE) {
                 return subItem;
             }
@@ -104,74 +104,53 @@ function main(error, distritosAux, data) {
         item.data = join;
     });
 
-    console.log(distritos);
-
     projection = d3_composite.geoConicConformalSpain().scale(2000).fitSize([width,height], distritos);
     path = d3.geoPath(projection);
 
-    function initMap() { //Index - 94
+    function initMap() { //Index - 94 - 1 > 93
         //Disposición del mapa
         mapLayer.selectAll(".dist")
-        .data(distritos.features)
-        .enter()
-        .append("path")
-        .attr("class", "dist")
-        .style('stroke','none')
-        .style('opacity', '1')
-        .style('fill', function(d) {
-            // if(d.data) {
-            //     if (d.data.porc_envejecido != 'NA') {
-            //         let color = '';
-            //         let env = +d.data.porc_envejecido.replace(',','.');
-            //         let total = +d.data.total;
-
-            //         if ( total < 1000) {
-            //             if (env < 15) {
-            //                 color = '#e8e8e8';
-            //             } else if (env >= 15 && env < 30) {
-            //                 color = '#b5c0da';
-            //             } else {
-            //                 color = '#6c83b5';
-            //             }
-            //         } else if ( total >= 1000 && total < 20000) {
-            //             if (env < 15) {
-            //                 color = '#b8d6be';
-            //             } else if (env >= 15 && env < 30) {
-            //                 color = '#8fb2b3';
-            //             } else {
-            //                 color = '#567994';
-            //             }
-            //         } else {
-            //             if (env < 15) {
-            //                 color = '#73ae7f';
-            //             } else if (env >= 15 && env < 30) {
-            //                 color = '#5a9178';
-            //             } else {
-            //                 color = '#2b5a5b';
-            //             }
-            //         }
-
-            //         return color;
-
-
-            //     } else {
-            //         return '#ccc';
-            //     }                
-            // } else {
-            //     return '#ccc';
-            // }            
-        })
-        .attr("d", path);
-
+            .data(distritos.features)
+            .enter()
+            .append("path")
+            .attr("class", "dist")
+            .style('stroke','#262626')
+            .style('stroke-width','0.6px')
+            .style('opacity', '1')
+            .style("fill", function(d) {
+                if(parseInt(d.data[93].casos_semanales) >= 0 & parseInt(d.data[93].casos_semanales) < 885) {
+                    return '#ffe6b7';
+                } else if (parseInt(d.data[93].casos_semanales) >= 885 & parseInt(d.data[93].casos_semanales) < 1770) {
+                    return '#fecc7b';
+                } else if (parseInt(d.data[93].casos_semanales) >= 1770 & parseInt(d.data[93].casos_semanales) < 2655) {
+                    return '#f8b05c';
+                } else if (parseInt(d.data[93].casos_semanales) >= 2655 & parseInt(d.data[93].casos_semanales) < 3540) {
+                    return '#f1944d';
+                } else if (parseInt(d.data[93].casos_semanales) >= 3540) {
+                    return '#e37a42';
+                }
+            })
+            .attr("d", path);
     }
 
     function updateMap(index) {
-        //Filtrado de datos
-
+        console.log(index);
         //Disposición del mapa
-
+        mapLayer.selectAll(".dist")
+            .style("fill", function(d) {
+                if(parseInt(d.data[index].casos_semanales) >= 0 & parseInt(d.data[index].casos_semanales) < 885) {
+                    return '#ffe6b7';
+                } else if (parseInt(d.data[index].casos_semanales) >= 885 & parseInt(d.data[index].casos_semanales) < 1770) {
+                    return '#fecc7b';
+                } else if (parseInt(d.data[index].casos_semanales) >= 1770 & parseInt(d.data[index].casos_semanales) < 2655) {
+                    return '#f8b05c';
+                } else if (parseInt(d.data[index].casos_semanales) >= 2655 & parseInt(d.data[index].casos_semanales) < 3540) {
+                    return '#f1944d';
+                } else if (parseInt(d.data[index].casos_semanales) >= 3540) {
+                    return '#e37a42';
+                }
+            })
     }
-
 
     ///Inicio
     initMap();

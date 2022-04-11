@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>COVID-19 cases in Madrid's districts</title>
+    <meta name="mrf-extractable" content="false">
+    <meta property='og:image' content=''>
+    <meta property="og:title" content="COVID-19 cases in Madrid's districts">
+    <meta property="og:description" content="COVID-19 cases in Madrid's districts">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Montserrat%3A300%2C300italic%2C400%2C400italic%2C500%2C700%2C700italic&#038;subset=latin&#038;ver=5.8' type='text/css' media='all' />
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Weekly evolution of COVID-19 cases in Madrid districts between March 2020 and December 2021</h1>
+        <div class="slider">
+            <div class="slider-control">
+                <div class="slider-buttons">
+                    <img id="btnPlay" class="btnControl" src="https://raw.githubusercontent.com/carlosmunozdiaz/timeline_covid19_madrid_map/main/pre/css/play.svg" width="16px" height="16px" alt="Play">
+                    <img id="btnPause" class="btnControl" src="https://raw.githubusercontent.com/carlosmunozdiaz/timeline_covid19_madrid_map/main/pre/css/pause.svg" width="16px" height="16px" alt="Pausa">
+                </div>
+                <p class="slider-text">Press 'play' or browse the bar to see the evolution of COVID-19 weekly cases per district</p>                
+            </div>
+            <div class="slider-container">
+                <input id="slider" class="slider" type="range" min="1" max="94" value="94"> 
+                <div id="slider-dates">
+                    <div id="minDate">March 3rd '20</div>
+                    <div id="sliderDate">Dec 28th 2021</div>
+                    <div id="maxDate">Dec 28th '21</div>
+                </div>               
+            </div>
+        </div>
+        <div class="legend">
+            <div class="legend--up">
+
+            </div>
+            <div class="legend--down">
+
+            </div>
+        </div>
+        <div class="b-map">
+            <div class="map" id="map1">
+            </div class="map" id="map2">
+        </div>
+        <h3 class="source">Source: Portal de Datos Abiertos del Ayuntamiento de Madrid</h3>
+    </div>
+</body>
+</html>

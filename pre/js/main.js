@@ -7,17 +7,17 @@ let d3_composite = require("d3-composite-projections");
 import '../css/main.scss';
 
 ///// VISUALIZACIÓN DEL GRÁFICO //////
-let map = d3.select('#map1');
+let map = d3.select('#map');
 
-const width = parseInt(map1.style('width'));
-const height = parseInt(map1.style('height'));
+const width = parseInt(map.style('width'));
+const height = parseInt(map.style('height'));
 
 let mapLayer = map.append('svg').attr('width', width).attr('height', height);
 let distritos;
 let projection, path;
 
 d3.queue()
-    .defer(d3.json, 'https://raw.githubusercontent.com/carlosmunozdiaz/timeline_covid19_madrid_map/main/data/distritos_topo.json')
+    .defer(d3.json, 'https://raw.githubusercontent.com/carlosmunozdiaz/timeline_covid19_madrid_map/main/data/distritos_v2.json')
     .defer(d3.csv, 'https://raw.githubusercontent.com/carlosmunozdiaz/timeline_covid19_madrid_map/main/data/covid19_settimana_v2.csv')
     .await(main);
 
@@ -25,8 +25,6 @@ function main(error, distritosAux, data) {
     if (error) throw error;
 
     distritos = topojson.feature(distritosAux, municipios.objects.distritos);
-
-    console.log(data);
 
     ////////
     //////
@@ -99,11 +97,10 @@ function main(error, distritosAux, data) {
     distritos.features.forEach(function(item) {
         let join = data.filter(function(subItem) {
             console.log(subItem.municipio_distrito.substr(5));
-            if(subItem.municipio_distrito.substr(5) == item.properties.NOMBRE) {
+            if(subItem.municipio_distrito.substr(7) == item.properties.NOMBRE) {
                 return subItem;
             }
         });
-        join = join[0];
         item.data = join;
     });
 
@@ -113,14 +110,58 @@ function main(error, distritosAux, data) {
     path = d3.geoPath(projection);
 
     function initMap() { //Index - 94
-        //Filtrado de datos
-        let auxData = data.filter(function(item) {
-            if(item.week == currentValue) {
-                return item;
-            }
-        });
-
         //Disposición del mapa
+        mapLayer.selectAll(".dist")
+        .data(distritos.features)
+        .enter()
+        .append("path")
+        .attr("class", "dist")
+        .style('stroke','none')
+        .style('opacity', '1')
+        .style('fill', function(d) {
+            // if(d.data) {
+            //     if (d.data.porc_envejecido != 'NA') {
+            //         let color = '';
+            //         let env = +d.data.porc_envejecido.replace(',','.');
+            //         let total = +d.data.total;
+
+            //         if ( total < 1000) {
+            //             if (env < 15) {
+            //                 color = '#e8e8e8';
+            //             } else if (env >= 15 && env < 30) {
+            //                 color = '#b5c0da';
+            //             } else {
+            //                 color = '#6c83b5';
+            //             }
+            //         } else if ( total >= 1000 && total < 20000) {
+            //             if (env < 15) {
+            //                 color = '#b8d6be';
+            //             } else if (env >= 15 && env < 30) {
+            //                 color = '#8fb2b3';
+            //             } else {
+            //                 color = '#567994';
+            //             }
+            //         } else {
+            //             if (env < 15) {
+            //                 color = '#73ae7f';
+            //             } else if (env >= 15 && env < 30) {
+            //                 color = '#5a9178';
+            //             } else {
+            //                 color = '#2b5a5b';
+            //             }
+            //         }
+
+            //         return color;
+
+
+            //     } else {
+            //         return '#ccc';
+            //     }                
+            // } else {
+            //     return '#ccc';
+            // }            
+        })
+        .attr("d", path);
 
     }
 
@@ -131,55 +172,8 @@ function main(error, distritosAux, data) {
 
     }
 
-    mapLayer.selectAll(".dist")
-        .data(distritos.features)
-        .enter()
-        .append("path")
-        .attr("class", "dist")
-        .style('stroke','none')
-        .style('opacity', '1')
-        .style('fill', function(d) {
-            if(d.data) {
-                if (d.data.porc_envejecido != 'NA') {
-                    let color = '';
-                    let env = +d.data.porc_envejecido.replace(',','.');
-                    let total = +d.data.total;
 
-                    if ( total < 1000) {
-                        if (env < 15) {
-                            color = '#e8e8e8';
-                        } else if (env >= 15 && env < 30) {
-                            color = '#b5c0da';
-                        } else {
-                            color = '#6c83b5';
-                        }
-                    } else if ( total >= 1000 && total < 20000) {
-                        if (env < 15) {
-                            color = '#b8d6be';
-                        } else if (env >= 15 && env < 30) {
-                            color = '#8fb2b3';
-                        } else {
-                            color = '#567994';
-                        }
-                    } else {
-                        if (env < 15) {
-                            color = '#73ae7f';
-                        } else if (env >= 15 && env < 30) {
-                            color = '#5a9178';
-                        } else {
-                            color = '#2b5a5b';
-                        }
-                    }
-
-                    return color;
-
-
-                } else {
-                    return '#ccc';
-                }                
-            } else {
-                return '#ccc';
-            }            
-        })
-        .attr("d", path);
+    ///Inicio
+    initMap();
+    createTimeslider();
 }

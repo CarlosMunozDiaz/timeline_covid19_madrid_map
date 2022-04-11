@@ -94,14 +94,14 @@ body {
             appearance: none;
             width: 5px;
             height: 15px;
-            background: #04AA6D;
+            background: #f1944d;
             cursor: pointer;
         }
         
         .slider::-moz-range-thumb {
             width: 5px;
             height: 15px;
-            background: #04AA6D;
+            background: #f1944d;
             cursor: pointer;
         }
 
@@ -143,17 +143,25 @@ body {
 .legend {
     display: flex;
     flex-direction: column;
+    justify-content: center;
 
-    margin-top: 12px;
+    width: 320px;
+    height: auto;
+
+    margin: 12px auto 0px auto;
 
     &--up {
-
+        width: 100%;
+        height: 10px;
+        background-image: linear-gradient(to right, #ffe6b7, #fecc7b, #f8b05c, #f1944d, #e37a42);
     }
 
     &--down {
-
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8em;
     }
-
 }
 
 .map {

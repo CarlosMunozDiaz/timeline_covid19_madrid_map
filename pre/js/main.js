@@ -7,19 +7,18 @@ let d3_composite = require("d3-composite-projections");
 import '../css/main.scss';
 
 ///// VISUALIZACIÓN DEL GRÁFICO //////
-let map1 = d3.select('#map1'), map2 = d3.select('#map2');
+let map = d3.select('#map1');
 
 const width = parseInt(map1.style('width'));
 const height = parseInt(map1.style('height'));
 
-let mapLayer1 = map1.append('svg').attr('width', width).attr('height', height),
-    mapLayer2 = map2.append('svg').attr('width', width).attr('height', height);
-    let distritos;
+let mapLayer = map.append('svg').attr('width', width).attr('height', height);
+let distritos;
 let projection, path;
 
 d3.queue()
-    .defer(d3.json, 'https://raw.githubusercontent.com/carlosmunozdiaz/simple_covid19_madrid_map/main/data/distritos_topo.json')
-    .defer(d3.csv, 'https://raw.githubusercontent.com/carlosmunozdiaz/simple_covid19_madrid_map/main/data/covid19_anni.csv')
+    .defer(d3.json, 'https://raw.githubusercontent.com/carlosmunozdiaz/timeline_covid19_madrid_map/main/data/distritos_topo.json')
+    .defer(d3.csv, 'https://raw.githubusercontent.com/carlosmunozdiaz/timeline_covid19_madrid_map/main/data/covid19_settimana_v2.csv')
     .await(main);
 
 function main(error, distritosAux, data) {
@@ -29,19 +28,108 @@ function main(error, distritosAux, data) {
 
     console.log(data);
 
+    ////////
+    //////
+    // LÓGICA DEL SLIDER
+    //////
+    ///////
+    let currentValue = 94;
+    const firstValue = 1;
+    const lastValue = 94;
+
+    let sliderRange = document.getElementById('slider');
+    let sliderDate = document.getElementById('sliderDate');
+    let playButton = document.getElementById('btnPlay');
+    let pauseButton = document.getElementById('btnPause');
+    let sliderInterval;
+
+    function createTimeslider(){        
+        /* Los siguientes eventos tienen la capacidad de modificar lo que se muestra en el mapa */
+        playButton.onclick = function () {
+            sliderInterval = setInterval(setNewValue,1500);
+            playButton.style.display = 'none';
+            pauseButton.style.display = 'inline-block';    
+        }
+    
+        pauseButton.onclick = function () {
+            clearInterval(sliderInterval);
+            playButton.style.display = 'inline-block';
+            pauseButton.style.display = 'none';
+        }
+    
+        sliderRange.oninput = function () {
+            sliderDate.innerHTML = setDate(this.value);
+            setNewValue('input');                
+        }
+    }
+    
+    /* Da nuevos valores al slider */
+    function setNewValue(type = undefined) {
+        let value = parseInt(sliderRange.value);
+        if (value == lastValue && !type) {
+            sliderRange.value = firstValue;
+        } else if (value == firstValue && type) {
+            sliderRange.value = value;
+        } else {
+            sliderRange.value = value + 1;
+        }
+        currentValue = sliderRange.value;
+        sliderDate.innerHTML = setDate(currentValue);
+    
+        updateMap(currentValue);
+    
+        if (currentValue == 2035) {
+            clearInterval(sliderInterval);
+            playButton.style.display = 'inline-block';
+            pauseButton.style.display = 'none';
+        }
+    }
+
+    function setDate(index) {
+        console.log(index);
+    }
+
+    ////////
+    //////
+    // LÓGICA DEL MAPA
+    //////
+    ///////
+
     ///HACEMOS EL JOIN
-    // muni.features.forEach(function(item) {
-    //     let join = data.filter(function(subItem) {
-    //         if(subItem.Municipios.substr(0,5) == item.properties.Codigo) {
-    //             return subItem;
-    //         }
-    //     });
-    //     join = join[0];
-    //     item.data = join;
-    // });
+    distritos.features.forEach(function(item) {
+        let join = data.filter(function(subItem) {
+            console.log(subItem.municipio_distrito.substr(5));
+            if(subItem.municipio_distrito.substr(5) == item.properties.NOMBRE) {
+                return subItem;
+            }
+        });
+        join = join[0];
+        item.data = join;
+    });
+
+    console.log(distritos);
 
     projection = d3_composite.geoConicConformalSpain().scale(2000).fitSize([width,height], distritos);
     path = d3.geoPath(projection);
+
+    function initMap() { //Index - 94
+        //Filtrado de datos
+        let auxData = data.filter(function(item) {
+            if(item.week == currentValue) {
+                return item;
+            }
+        });
+
+        //Disposición del mapa
+
+    }
+
+    function updateMap(index) {
+        //Filtrado de datos
+
+        //Disposición del mapa
+
+    }
 
     mapLayer.selectAll(".dist")
         .data(distritos.features)
@@ -94,20 +182,4 @@ function main(error, distritosAux, data) {
             }            
         })
         .attr("d", path);
-
-    mapLayer.append('path')
-        .style('fill', 'none')
-        .style('stroke', '#000')
-        .attr('d', projection.getCompositionBorders());
-
-    mapLayer.selectAll('.prov')
-        .data(provs.features)
-        .enter()
-        .append('path')
-        .attr('d', path)
-        .style('stroke-width','0.25px')
-        .style('stroke', '#000')
-        .style('fill', 'transparent');
-
-    setChartCanvas();
 }

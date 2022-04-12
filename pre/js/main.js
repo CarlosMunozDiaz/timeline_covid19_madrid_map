@@ -123,6 +123,7 @@ function main(error, distritosAux, data) {
             .style('stroke-width','0.6px')
             .style('opacity', '1')
             .style("fill", function(d) {
+                console.log(d.data[93]);
                 return color(+d.data[93].tasa_incidencia_semanal);
             })
             .attr("d", path);
@@ -143,9 +144,10 @@ function main(error, distritosAux, data) {
 
     function updateMap(index) {
         //Disposición del mapa
+        console.log(index);
         mapLayer.selectAll(".dist")
             .style("fill", function(d) {
-                return color(+d.data[index].tasa_incidencia_semanal);
+                return color(+d.data[index - 1].tasa_incidencia_semanal);
             })
     }
 

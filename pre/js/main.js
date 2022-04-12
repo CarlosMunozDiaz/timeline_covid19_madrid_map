@@ -19,7 +19,7 @@ let projection, path;
 
 d3.queue()
     .defer(d3.json, 'https://raw.githubusercontent.com/carlosmunozdiaz/timeline_covid19_madrid_map/main/data/distritos_v2.json')
-    .defer(d3.csv, 'https://raw.githubusercontent.com/carlosmunozdiaz/timeline_covid19_madrid_map/main/data/covid19_settimana_v2.csv')
+    .defer(d3.csv, 'https://raw.githubusercontent.com/carlosmunozdiaz/timeline_covid19_madrid_map/main/data/covid19_settimana_v3.csv')
     .await(main);
 
 function main(error, distritosAux, data) {
